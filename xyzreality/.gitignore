@@ -1,0 +1,12 @@
+*.vcxproj.user
+*.pdb
+*.ilk
+*.bak
+*.obj
+*.idb
+*.bc
+*.o
+*.lib
+*.exp
+*.so
+*.a
