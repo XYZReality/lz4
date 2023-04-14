@@ -34,9 +34,9 @@
 SED = sed
 
 # Version numbers
-LIBVER_MAJOR_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_MAJOR/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ./lz4.h`
-LIBVER_MINOR_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_MINOR/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ./lz4.h`
-LIBVER_PATCH_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_RELEASE/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ./lz4.h`
+LIBVER_MAJOR_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_MAJOR/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ../lib/lz4.h`
+LIBVER_MINOR_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_MINOR/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ../lib/lz4.h`
+LIBVER_PATCH_SCRIPT:=`$(SED) -n '/define LZ4_VERSION_RELEASE/s/.*[[:blank:]]\([0-9][0-9]*\).*/\1/p' < ../lib/lz4.h`
 LIBVER_SCRIPT:= $(LIBVER_MAJOR_SCRIPT).$(LIBVER_MINOR_SCRIPT).$(LIBVER_PATCH_SCRIPT)
 LIBVER_MAJOR := $(shell echo $(LIBVER_MAJOR_SCRIPT))
 LIBVER_MINOR := $(shell echo $(LIBVER_MINOR_SCRIPT))
@@ -48,6 +48,7 @@ BUILD_STATIC:=yes
 
 CPPFLAGS+= -DXXH_NAMESPACE=LZ4_
 CPPFLAGS+= $(MOREFLAGS)
+CPPFLAGS+= -I../lib
 CFLAGS  ?= -O3
 DEBUGFLAGS:= -Wall -Wextra -Wcast-qual -Wcast-align -Wshadow \
              -Wswitch-enum -Wdeclaration-after-statement -Wstrict-prototypes \
@@ -55,7 +56,7 @@ DEBUGFLAGS:= -Wall -Wextra -Wcast-qual -Wcast-align -Wshadow \
 CFLAGS  += $(DEBUGFLAGS)
 FLAGS    = $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
-SRCFILES := $(sort $(wildcard *.c))
+SRCFILES := $(sort $(wildcard ../lib/*.c))
 
 include ../Makefile.inc
 
