@@ -43,9 +43,6 @@ LIBVER_MINOR := $(shell echo $(LIBVER_MINOR_SCRIPT))
 LIBVER_PATCH := $(shell echo $(LIBVER_PATCH_SCRIPT))
 LIBVER  := $(shell echo $(LIBVER_SCRIPT))
 
-# CC  = "$(EMSCRIPTEN)/emcc"
-# CXX = "$(EMSCRIPTEN)/em++"
-# AR  = "$(EMSCRIPTEN)/emar"
 CC  = $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
 CXX = $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++
 AR  = $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar
@@ -83,7 +80,7 @@ lib-release: DEBUGFLAGS :=
 lib-release: lib
 
 .PHONY: lib
-lib: liblz4.so liblz4
+lib: liblz4.so liblz4.a
 
 .PHONY: all
 all: lib
@@ -92,18 +89,18 @@ all: lib
 all32: CFLAGS+=-m32
 all32: all
 
-liblz4.so: $(SRCFILES)
+liblz4.a: $(SRCFILES)
 ifeq ($(BUILD_STATIC),yes)  # can be disabled on command line
 	@echo compiling static library
 	$(COMPILE.c) $^
 	$(AR) rcs $@ *.o
 endif
 
-$(LIBLZ4): $(SRCFILES)
+liblz4.so: $(SRCFILES)
 ifeq ($(BUILD_SHARED),yes)
 	@echo compiling dynamic library $(LIBVER)
-	@mkdir -p obj_wasm
-	$(CC) $(FLAGS) -shared $^ -fPIC -fvisibility=hidden $(SONAME_FLAGS) -o obj_wasm/$@
+	@mkdir -p obj_android
+	$(CC) $(FLAGS) -shared $^ -fPIC -fvisibility=hidden $(SONAME_FLAGS) -o $@
 	@echo creating versioned links
 	$(LN_SF) $@ liblz4.$(SHARED_EXT_MAJOR)
 	$(LN_SF) $@ liblz4.$(SHARED_EXT)
