@@ -50,7 +50,7 @@ AR  = $(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar
 BUILD_SHARED:=yes
 BUILD_STATIC:=yes
 
-CPPFLAGS+= -DXXH_NAMESPACE=LZ4_
+CPPFLAGS+= -DXXH_NAMESPACE=LZ4_ --target=aarch64-none-linux-android24
 CPPFLAGS+= $(MOREFLAGS)
 CPPFLAGS+= -I../lib
 CFLAGS  ?= -O3
